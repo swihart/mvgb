@@ -7,8 +7,8 @@
 *
 * 1. Delete the Test at the top
 * 2. Delete most of SUBROUTINE MVSPCL
-*
-*
+* 3. GET RID OF SNU (all caps , match case.)
+* 4.
 *
 *
 * Copyright (C) 2013, Alan Genz,  All rights reserved.
@@ -148,13 +148,13 @@
       PARAMETER ( NL = 1000 )
       INTEGER INFI(NL), NU, ND, INFORM, NY
       DOUBLE PRECISION COV(NL*(NL+1)/2), A(NL), B(NL), DL(NL), Y(NL)
-      DOUBLE PRECISION MVCHNV, SNU, R, VL, ER, DI, EI
-      SAVE NU, SNU, INFI, A, B, DL, COV
+      DOUBLE PRECISION MVCHNV, R, VL, ER, DI, EI
+      SAVE NU, INFI, A, B, DL, COV
       IF ( NU .LE. 0 ) THEN
          R = 1
          CALL MVVLSB( N+1, W, R, DL,INFI,A,B,COV, Y, DI,EI, NY, F(1) )
       ELSE
-         R = MVCHNV( NU, W(N) )/SNU
+         R = MVCHNV( NU, W(N) )
          CALL MVVLSB( N  , W, R, DL,INFI,A,B,COV, Y, DI,EI, NY, F(1) )
       END IF
       RETURN
@@ -169,14 +169,14 @@
       CALL MVSORT( N, LOWER, UPPER, DELTA, CORREL, INFIN, Y, .TRUE.,
      &            ND,     A,     B,    DL,    COV,  INFI, INFORM )
       NU = NUIN
-      CALL MVSPCL( ND, NU, A, B, DL, COV, INFI, SNU, VL, ER, INFORM )
+      CALL MVSPCL( ND, NU, A, B, DL, COV, INFI, VL, ER, INFORM )
       END
 *
-      SUBROUTINE MVSPCL( ND, NU, A,B,DL, COV, INFI, SNU, VL,ER, INFORM )
+      SUBROUTINE MVSPCL( ND, NU, A,B,DL, COV, INFI, VL,ER, INFORM )
 *
 *     Special cases subroutine
 *
-      DOUBLE PRECISION COV(*), A(*), B(*), DL(*), SNU, R, VL, ER
+      DOUBLE PRECISION COV(*), A(*), B(*), DL(*), R, VL, ER
       INTEGER ND, NU, INFI(*), INFORM
       DOUBLE PRECISION MVBVT, MVSTDT
       IF ( INFORM .GT. 0 ) THEN
