@@ -1390,6 +1390,6 @@
 *
       DOUBLE PRECISION intermediatex, randomuniform
 
-      x = randomuniform()
-      MVUNI = x
+      intermediatex = randomuniform()
+      MVUNI = intermediatex
       END
