@@ -1,7 +1,15 @@
 *
-* Downloaded from
+* Originally downloaded from
 * http://www.math.wsu.edu/faculty/genz/software/fort77/mvtdstpack.f
 * on 2022-03-01
+*
+* Then the following edits are made:
+*
+* 1. Delete the Test at the top
+* 2. Delete most of SUBROUTINE MVSPCL
+*
+*
+*
 *
 * Copyright (C) 2013, Alan Genz,  All rights reserved.
 *
@@ -174,74 +182,6 @@
       IF ( INFORM .GT. 0 ) THEN
          VL = 0
          ER = 1
-      ELSE
-*
-*        Special cases
-*
-         IF ( ND .EQ. 0 ) THEN
-            ER = 0
-*  Code added to fix ND = 0 bug, 24/03/2009 ->
-            VL = 1
-*  <- Code added to fix ND = 0 bug, 24/03/2009
-         ELSE IF ( ND.EQ.1 .AND. ( NU.LT.1 .OR. ABS(DL(1)).EQ.0 ) ) THEN
-*
-*           1-d case for normal or central t
-*
-            VL = 1
-            IF ( INFI(1) .NE. 1 ) VL = MVSTDT( NU, B(1) - DL(1) )
-            IF ( INFI(1) .NE. 0 ) VL = VL - MVSTDT( NU, A(1) - DL(1) )
-            IF ( VL .LT. 0 ) VL = 0
-            ER = 2D-16
-            ND = 0
-         ELSE IF ( ND .EQ. 2 .AND.
-     &            ( NU .LT. 1 .OR. ABS(DL(1))+ABS(DL(2)) .EQ. 0 ) ) THEN
-*
-*           2-d case for normal or central t
-*
-            IF ( INFI(1) .NE. 0 ) A(1) = A(1) - DL(1)
-            IF ( INFI(1) .NE. 1 ) B(1) = B(1) - DL(1)
-            IF ( INFI(2) .NE. 0 ) A(2) = A(2) - DL(2)
-            IF ( INFI(2) .NE. 1 ) B(2) = B(2) - DL(2)
-            IF ( ABS( COV(3) ) .GT. 0 ) THEN
-*
-*              2-d nonsingular case
-*
-               R = SQRT( 1 + COV(2)**2 )
-               IF ( INFI(2) .NE. 0 ) A(2) = A(2)/R
-               IF ( INFI(2) .NE. 1 ) B(2) = B(2)/R
-               COV(2) = COV(2)/R
-               VL = MVBVT( NU, A, B, INFI, COV(2) )
-               ER = 1D-15
-            ELSE
-*
-*              2-d singular case
-*
-               IF ( INFI(1) .NE. 0 ) THEN
-                  IF ( INFI(2) .NE. 0 ) A(1) = MAX( A(1), A(2) )
-               ELSE
-                  IF ( INFI(2) .NE. 0 ) A(1) = A(2)
-               END IF
-               IF ( INFI(1) .NE. 1 ) THEN
-                  IF ( INFI(2) .NE. 1 ) B(1) = MIN( B(1), B(2) )
-               ELSE
-                  IF ( INFI(2) .NE. 1 ) B(1) = B(2)
-               END IF
-               IF ( INFI(1) .NE. INFI(2) ) INFI(1) = 2
-               VL = 1
-*  A(1), B(1) Bug Fixed, 28/05/2013
-               IF ( INFI(1) .NE. 1 ) VL = MVSTDT( NU, B(1) )
-               IF ( INFI(1) .NE. 0 ) VL = VL - MVSTDT( NU, A(1) )
-               IF ( VL .LT. 0 ) VL = 0
-               ER = 2D-16
-            END IF
-            ND = 0
-         ELSE
-            IF ( NU .GT. 0 ) THEN
-               SNU = SQRT( DBLE(NU) )
-            ELSE
-               ND = ND - 1
-            END IF
-         END IF
       END IF
       END
 *
