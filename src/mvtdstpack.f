@@ -8,7 +8,7 @@
 * 1. Delete the Test at the top
 * 2. Delete most of SUBROUTINE MVSPCL
 * 3. GET RID OF SNU (all caps , match case.)
-* 4.
+* 4. Rename MVCHNV to ONEOVERSQRTA
 *
 *
 * Copyright (C) 2013, Alan Genz,  All rights reserved.
@@ -148,13 +148,13 @@
       PARAMETER ( NL = 1000 )
       INTEGER INFI(NL), NU, ND, INFORM, NY
       DOUBLE PRECISION COV(NL*(NL+1)/2), A(NL), B(NL), DL(NL), Y(NL)
-      DOUBLE PRECISION MVCHNV, R, VL, ER, DI, EI
+      DOUBLE PRECISION ONEOVERSQRTA, R, VL, ER, DI, EI
       SAVE NU, INFI, A, B, DL, COV
       IF ( NU .LE. 0 ) THEN
          R = 1
          CALL MVVLSB( N+1, W, R, DL,INFI,A,B,COV, Y, DI,EI, NY, F(1) )
       ELSE
-         R = MVCHNV( NU, W(N) )
+         R = ONEOVERSQRTA( NU, W(N) )
          CALL MVVLSB( N  , W, R, DL,INFI,A,B,COV, Y, DI,EI, NY, F(1) )
       END IF
       RETURN
@@ -1055,9 +1055,9 @@
 *
       end
 *
-      DOUBLE PRECISION FUNCTION MVCHNV( N, P )
+      DOUBLE PRECISION FUNCTION ONEOVERSQRTA( N, P )
 *
-*                  MVCHNV
+*                  ONEOVERSQRTA
 *     P =  1 - K  I     exp(-t*t/2) t**(N-1) dt, for N >= 1.
 *               N  0
 *
@@ -1102,12 +1102,12 @@
       ELSE
          R = 0
       END IF
-      MVCHNV = R
+      ONEOVERSQRTA = R
       END
 *
       DOUBLE PRECISION FUNCTION MVCHNC( LKN, N, P, R )
 *
-*     Third order Schroeder correction to R for MVCHNV
+*     Third order Schroeder correction to R for ONEOVERSQRTA
 *
       INTEGER I, N
       DOUBLE PRECISION P, R, LKN, DF, RR, RN, CHI, MVPHI
