@@ -9,7 +9,7 @@
 * 2. Delete most of SUBROUTINE MVSPCL
 * 3. GET RID OF SNU (all caps , match case.)
 * 4. Rename MVCHNV to ONEOVERSQRTA
-* 5. make a F77_SUB for ONEOVERSQRTA called onesqrtovera
+* 5. make a F77_SUB for ONEOVERSQRTA called f77oneoversqrta
 * 6. make a F77_SUB for MVUNI called randomuniform
 *
 * Copyright (C) 2013, Alan Genz,  All rights reserved.
@@ -1059,9 +1059,9 @@
       DOUBLE PRECISION FUNCTION ONEOVERSQRTA( N, P )
 *
       INTEGER N
-      DOUBLE PRECISION P, intermediatex, oneoversqrta
+      DOUBLE PRECISION P, intermediatex, f77oneoversqrta
 
-      intermediatex = oneoversqrta(N,P)
+      intermediatex = f77oneoversqrta(N,P)
       ONEOVERSQRTA = intermediatex
       END
 *
