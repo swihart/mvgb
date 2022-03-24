@@ -3,13 +3,15 @@
 \docType{package}
 \name{mvgb}
 \alias{mvgb}
-\title{mvgb: A package for computating the notorious bar statistic.}
+\title{Multivariate Probabilities of Scale Mixtures of Multivariate Normal Distributions}
 \description{
-The mvgb package provides three categories of important functions:
-foo, bar and baz.
+The QRVSN algorithm is used in a broader context.
 }
-\section{Mypackage functions}{
+\section{The mvgb functions include}{
 
-The mvgb functions ...
+
+\code{\link{pmvt}} -- multivariate student t distribution probabilities
+
+\code{\link{rmvt}} -- multivariate student t distribution random variates
 }
 

@@ -1,23 +1,23 @@
 Package: mvgb
-Title: Multivariate Probabilities via the Genz and Bretz Method
-Version: 0.0.0.9000
+Title: Multivariate Probabilities of Scale Mixtures of Multivariate Normal Distributions via the Genz and Bretz (2002) QRSVN Method
+Version: 0.0.2
 Authors@R: 
-    c(       person("Alan", "Genz", role="auth", comment=c("wrote mvtdstpack.f")),
-             person("J.P.", "Nolan", role = "aut"),
-             person("Bruce", "Swihart", 
+    c(person("Alan", "Genz", role="aut", comment=c("wrote mvtdstpack.f")),
+      person("Bruce", "Swihart", 
              role = c("aut", "cre"), 
              email="bruce.swihart@gmail.com",
              comment = c(ORCID = "0000-0002-4216-9942")
              ))
-Description: This package estimates multivariate subgaussian stable probabilities 
-    using the QRSVN algorithm in Genz and Bretz (2002) and the parameterization
-    by Nolan (2013).  This package uses libstable which is GPL-3 so this R package
-    is also GPL-3.
+Description: Generates multivariate student-t probabilities using the QRSVN
+    algorithm as detailed in Genz and Bretz (2002) <DOI:10.1198/106186002394>
+    but by sampling gamma variates not chi/sqrt(nu).
 Depends: R (>= 3.4.0),
-License: GPL-3
+  mvtnorm
+License: LGPL (>= 2.1)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+

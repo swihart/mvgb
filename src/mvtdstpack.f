@@ -11,7 +11,7 @@
 * 4. Rename MVCHNV to ONEOVERSQRTA
 * 5. make a F77_SUB for ONEOVERSQRTA called f77oneoversqrta
 * 6. make a F77_SUB for MVUNI called randomuniform
-*
+* 7. `E` -> `E(1)` at line 136
 * Copyright (C) 2013, Alan Genz,  All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -133,7 +133,7 @@
 *           Call the lattice rule integration subroutine
 *
             CALL MVKBRV( ND, IVLS, MAXPTS, 1, MVSUBR, ABSEPS, RELEPS,
-     &                    E, V, INFORM )
+     &                    E(1), V, INFORM )
             ERROR = E(1)
             VALUE = V(1)
          ENDIF
