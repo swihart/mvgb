@@ -8,8 +8,8 @@
 * 1. Delete the Test at the top
 * 2. Delete most of SUBROUTINE MVSPCL
 * 3. GET RID OF SNU (all caps , match case.)
-* 4. Rename MVCHNV to ONEOVERSQRTA
-* 5. make a F77_SUB for ONEOVERSQRTA called f77oneoversqrta
+* 4. Rename MVCHNV to ONEOVERSQRTA_T
+* 5. make a F77_SUB for ONEOVERSQRTA_T called f77oneoversqrta
 * 6. make a F77_SUB for MVUNI called randomuniform
 * 7. `E` -> `E(1)` at line 136
 * Copyright (C) 2013, Alan Genz,  All rights reserved.
@@ -149,13 +149,23 @@
       PARAMETER ( NL = 1000 )
       INTEGER INFI(NL), NU, ND, INFORM, NY
       DOUBLE PRECISION COV(NL*(NL+1)/2), A(NL), B(NL), DL(NL), Y(NL)
-      DOUBLE PRECISION ONEOVERSQRTA, R, VL, ER, DI, EI
+      DOUBLE PRECISION ONEOVERSQRTA_T, R, VL, ER, DI, EI,
+     &                 ONEOVERSQRTA_LAP, ONEOVERSQRTA_SS
       SAVE NU, INFI, A, B, DL, COV
       IF ( NU .LE. 0 ) THEN
          R = 1
          CALL MVVLSB( N+1, W, R, DL,INFI,A,B,COV, Y, DI,EI, NY, F(1) )
-      ELSE
-         R = ONEOVERSQRTA( NU, W(N) )
+      END IF
+      IF ( NU .GE. 1 .AND. NU .LE. 100) THEN
+         R = ONEOVERSQRTA_T( NU, W(N) )
+         CALL MVVLSB( N  , W, R, DL,INFI,A,B,COV, Y, DI,EI, NY, F(1) )
+      END IF
+      IF ( NU .GE. 877777777 .AND. NU .LE. 877777777) THEN
+         R = ONEOVERSQRTA_LAP( NU, W(N) )
+         CALL MVVLSB( N  , W, R, DL,INFI,A,B,COV, Y, DI,EI, NY, F(1) )
+      END IF
+      IF ( NU .GE. 900000001 .AND. NU .LT. 902000000) THEN
+         R = ONEOVERSQRTA_SS( NU, W(N) )
          CALL MVVLSB( N  , W, R, DL,INFI,A,B,COV, Y, DI,EI, NY, F(1) )
       END IF
       RETURN
@@ -1056,13 +1066,35 @@
 *
       end
 *
-      DOUBLE PRECISION FUNCTION ONEOVERSQRTA( N, P )
+      DOUBLE PRECISION FUNCTION ONEOVERSQRTA_T( N, P )
 *
       INTEGER N
-      DOUBLE PRECISION P, intermediatex, f77oneoversqrta
+      DOUBLE PRECISION P, intermediatex,
+     &                 f77oneoversqrta_where_a_is_inverse_gamma
 
-      intermediatex = f77oneoversqrta(N,P)
-      ONEOVERSQRTA = intermediatex
+      intermediatex = f77oneoversqrta_where_a_is_inverse_gamma(N,P)
+      ONEOVERSQRTA_T = intermediatex
+      END
+*
+*
+      DOUBLE PRECISION FUNCTION ONEOVERSQRTA_LAP( N, P )
+*
+      INTEGER N
+      DOUBLE PRECISION P, intermediatex,
+     &                 f77oneoversqrta_where_a_is_exponential
+
+      intermediatex = f77oneoversqrta_where_a_is_exponential(N,P)
+      ONEOVERSQRTA_LAP = intermediatex
+      END
+*
+      DOUBLE PRECISION FUNCTION ONEOVERSQRTA_SS( N, P )
+*
+      INTEGER N
+      DOUBLE PRECISION P, intermediatex,
+     &                 f77oneoversqrta_where_a_is_posstab
+
+      intermediatex = f77oneoversqrta_where_a_is_posstab(N,P)
+      ONEOVERSQRTA_SS = intermediatex
       END
 *
       SUBROUTINE MVKBRV( NDIM, MINVLS, MAXVLS, NF, FUNSUB,
