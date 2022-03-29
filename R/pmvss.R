@@ -2,28 +2,31 @@
 #'
 #'
 #' Computes the the distribution function of the multivariate subgaussian stable
-#' distribution for arbitrary limits, alpha and
-#' shape matrices.
+#' distribution for arbitrary limits, alpha,
+#' shape matrices, and location vectors.
 #' This function is unlike \code{mvtnorm::pmvt} in two ways:
 #'   1) The QRVSN method is used for every dimension \code{n} (including bivariate and trivariate),
 #'   2) The QRVSN method on positive stable variates, not chi/sqrt(nu).
 #'
-#' @param x NULL these are hardcoded for the moment
-#' @param n the dimension.  Bivariate would be n=2, trivariate n=3, etc.
-#' @param alpha real number between 0 and 2 that cannot have more than 6 digits precision.
-#'  0.123456 is okay; 0.1234567 is not. Thus alpha in \[0.000001, 1.999999\].
+#'
 #' @param lower lower bounds of integration must be length n, finite
 #' @param upper upper bounds of integration must be length n, finite
-#' @param infin for finite intervals, must be vector length n every element 2
-#' @param corr correlation
-#' @param corrF correlationF
-#' @param delta location vector must be length n
+#' @param alpha real number between 0 and 2 that cannot have more than 6 digits precision.
+#'  0.123456 is okay; 0.1234567 is not. Thus alpha in \[0.000001, 1.999999\].
+#' @param Q shape matrix
+#' @param delta location vector must have length equal to the number of rows of Q. Defaults to the 0 vector.
+#' @param maxpts (description from FORTRAN code) INTEGER, maximum number of function values allowed. This
+#' parameter can be used to limit the time. A sensible
+#' strategy is to start with MAXPTS = 1000*N, and then
+#' increase MAXPTS if ERROR is too large. (description from mvtnorm::GenzBretz) maximum number of function values as integer. The internal FORTRAN code always uses a minimum number depending on the dimension. (for example 752 for three-dimensional problems).
+#' @param abseps absolute error tolerance
+#' @param releps relative error tolerance as double.
 #'
 #' @references
 #'
 #' Genz, A. and Bretz, F. (2002), Methods for the computation of multivariate
 #' t-probabilities. \emph{Journal of Computational and Graphical Statistics},
-#' \bold{11}, 950--971. <DOI:10.1198/106186002394>
+#' \bold{11}, 950--971.
 #'
 #' \url{http://www.math.wsu.edu/faculty/genz/homepage}
 #'
@@ -87,15 +90,10 @@
 #'                0.85, 0.85   , 0.85   , 0.85   , 1   ),
 #'              .Dim = c(5L,5L))
 #'
-#'mvgb::pmvss(x=NULL,
-#'            n=5,
-#'            alpha=1,
-#'            lower=rep(-1,5),
+#'mvgb::pmvss(lower=rep(-1,5),
 #'            upper=rep(1,5),
-#'            infin=rep(2,5),
-#'            corr=Q,
-#'            corrF=NULL,
-#'            delta=rep(0,5))[c("value","inform","error","NU")]
+#'            alpha=1,
+#'            Q=Q)[c("value","inform","error","NU")]
 #'
 #'mvgb::pmvt(x=NULL,
 #'           n=5,
@@ -108,11 +106,70 @@
 #'           delta=rep(0,5))[c("value","inform","error","NU")]
 #'
 #'
+#'set.seed(10)
+#'shape_matrix <- structure(c(1, 0.9, 0.9, 0.9, 0.9, 0.9, 1, 0.9, 0.9, 0.9, 0.9,
+#'                            0.9, 1, 0.9, 0.9, 0.9, 0.9, 0.9, 1, 0.9, 0.9, 0.9, 0.9, 0.9,
+#'                            1), .Dim = c(5L, 5L))
+#'
+#'mvgb::pmvss(lower=rep(-2,5),
+#'            upper=rep(2,5),
+#'            alpha=1.7,
+#'            Q=shape_matrix,
+#'            delta=rep(0,5))[c("value","inform","error","NU")]
+#' @importFrom stats cov2cor
 #' @export
-pmvss <- function(x, n, alpha, lower, upper, infin, corr, corrF, delta) {
+pmvss <- function(lower, upper, alpha, Q, delta=rep(0,NROW(Q)), maxpts=25000, abseps = 0.001, releps = 0) {
+
+  #########################
+  ## Ascertain dimension ##
+  #########################
+  n=NROW(Q)
+
+
+  #########################
+  ## Stop out of bounds  ##
+  #########################
+  if (n<1 | n>1000) stop("only dimensions 1 <= n <= 1000 allowed")
+
 
   if(alpha < 0.000001 | alpha > 1.999999)
     stop("\n`alpha` is out of bounds.\nPlease make sure alpha is in [0.000001, 1.999999]")
+
+
+  ###############################
+  ## Prep the infinite limits  ##
+  ###############################
+  is_pos_inf <- function(w) is.infinite(w) & w > 0
+  is_neg_inf <- function(w) is.infinite(w) & w < 0
+
+  infin <- rep(2, n)
+  infin[is_pos_inf(upper)] <- 1
+  infin[is_neg_inf(lower)] <- 0
+  infin[is_neg_inf(lower) & is_pos_inf(upper)] <- -1
+
+  upper[infin %in% c(-1,1)] <- 0
+  lower[infin %in% c(-1,0)] <- 0
+
+
+  ############################################
+  ## Take care of the all -Inf to Inf case  ##
+  ############################################
+  if (all(infin < 0))
+    return(list(value = 1, error = 0))
+
+
+  ##################################################
+  ## Adjust to correlation input; subtract delta  ##
+  ##################################################
+
+  sqd <- sqrt(diag(Q))
+  lower <- (lower-delta)/sqd
+  upper <- (upper-delta)/sqd
+  corr <- cov2cor(Q)
+
+  ##################################################
+  ## Submit just upper triangle of corr           ##
+  ##################################################
 
   if (n > 1) {
     corrF <- matrix(as.vector(corr), ncol=n, byrow=TRUE)
@@ -127,10 +184,10 @@ pmvss <- function(x, n, alpha, lower, upper, infin, corr, corrF, delta) {
      UPPER = as.double(upper),
      INFIN = as.integer(infin),
      CORREL = as.double(corrF),
-     DELTA = as.double(delta),
-     MAXPTS = as.integer(25000*10),##as.integer(25000*100),##as.integer(25000),
-     ABSEPS = as.double(0.0001),##as.double(0.001),
-     RELEPS = as.double(0),
+     DELTA = as.double(rep(0,n)),## fix at 0; delta for pmvt is diff than pmvss
+     MAXPTS = as.integer(maxpts),
+     ABSEPS = as.double(abseps),
+     RELEPS = as.double(releps),
      error = as.double(error),
      value = as.double(value),
      inform = as.integer(inform),
