@@ -4,27 +4,37 @@
 \alias{pmvss}
 \title{Multivariate Subgaussian Stable Distribution Probabilities (via positive stable variates)}
 \usage{
-pmvss(x, n, alpha, lower, upper, infin, corr, corrF, delta)
+pmvss(
+  lower,
+  upper,
+  alpha,
+  Q,
+  delta = rep(0, NROW(Q)),
+  maxpts = 25000,
+  abseps = 0.001,
+  releps = 0
+)
 }
 \arguments{
-\item{x}{NULL these are hardcoded for the moment}
-
-\item{n}{the dimension.  Bivariate would be n=2, trivariate n=3, etc.}
-
-\item{alpha}{real number between 0 and 2 that cannot have more than 6 digits precision.
-0.123456 is okay; 0.1234567 is not. Thus alpha in [0.000001, 1.999999].}
-
 \item{lower}{lower bounds of integration must be length n, finite}
 
 \item{upper}{upper bounds of integration must be length n, finite}
 
-\item{infin}{for finite intervals, must be vector length n every element 2}
+\item{alpha}{real number between 0 and 2 that cannot have more than 6 digits precision.
+0.123456 is okay; 0.1234567 is not. Thus alpha in [0.000001, 1.999999].}
 
-\item{corr}{correlation}
+\item{Q}{shape matrix}
 
-\item{corrF}{correlationF}
+\item{delta}{location vector must have length equal to the number of rows of Q. Defaults to the 0 vector.}
 
-\item{delta}{location vector must be length n}
+\item{maxpts}{(description from FORTRAN code) INTEGER, maximum number of function values allowed. This
+parameter can be used to limit the time. A sensible
+strategy is to start with MAXPTS = 1000*N, and then
+increase MAXPTS if ERROR is too large. (description from mvtnorm::GenzBretz) maximum number of function values as integer. The internal FORTRAN code always uses a minimum number depending on the dimension. (for example 752 for three-dimensional problems).}
+
+\item{abseps}{absolute error tolerance}
+
+\item{releps}{relative error tolerance as double.}
 }
 \value{
 Returns the variables from the MVTDST function (QRVSN algorithm):\preformatted{N      INTEGER, the number of variables.
@@ -77,8 +87,8 @@ RND    ignore; this initializes RNG
 }
 \description{
 Computes the the distribution function of the multivariate subgaussian stable
-distribution for arbitrary limits, alpha and
-shape matrices.
+distribution for arbitrary limits, alpha,
+shape matrices, and location vectors.
 This function is unlike \code{mvtnorm::pmvt} in two ways:
 \enumerate{
 \item The QRVSN method is used for every dimension \code{n} (including bivariate and trivariate),
@@ -93,32 +103,37 @@ Q = structure(c(1, 0.85, 0.85, 0.85, 0.85,
                0.85, 0.85   , 0.85   , 0.85   , 1   ),
              .Dim = c(5L,5L))
 
-mvgb::pmvss(x=NULL,
-           n=5,
-           alpha=1,
-           lower=rep(-1,5),
+## default maxpts=25000 doesn't finish with error < abseps
+mvgb::pmvss(lower=rep(-1,5),
            upper=rep(1,5),
-           infin=rep(2,5),
-           corr=Q,
-           corrF=NULL,
-           delta=rep(0,5))[c("value","inform","error","NU")]
+           alpha=1,
+           Q=Q,
+           maxpts=25000)[c("value","inform","error")]
 
-mvgb::pmvt(x=NULL,
-          n=5,
-          df=1,
-          lower=rep(-1,5),
-          upper=rep(1,5),
-          infin=rep(2,5),
-          corr=Q,
-          corrF=NULL,
-          delta=rep(0,5))[c("value","inform","error","NU")]
+## increase maxpts to get inform value 0 (that is, error < abseps)
+mvgb::pmvss(lower=rep(-1,5),
+           upper=rep(1,5),
+           alpha=1,
+           Q=Q,
+           maxpts=25000*30)[c("value","inform","error")]
 
 
+set.seed(10)
+shape_matrix <- structure(c(1, 0.9, 0.9, 0.9, 0.9, 0.9, 1, 0.9, 0.9, 0.9, 0.9,
+                           0.9, 1, 0.9, 0.9, 0.9, 0.9, 0.9, 1, 0.9, 0.9, 0.9, 0.9, 0.9,
+                           1), .Dim = c(5L, 5L))
+
+mvgb::pmvss(lower=rep(-2,5),
+           upper=rep(2,5),
+           alpha=1.7,
+           Q=shape_matrix,
+           delta=rep(0,5),
+           maxpts=25000*30)[c("value","inform","error")]
 }
 \references{
 Genz, A. and Bretz, F. (2002), Methods for the computation of multivariate
 t-probabilities. \emph{Journal of Computational and Graphical Statistics},
-\bold{11}, 950--971. \url{DOI:10.1198/106186002394}
+\bold{11}, 950--971.
 
 \url{http://www.math.wsu.edu/faculty/genz/homepage}
 

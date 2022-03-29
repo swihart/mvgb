@@ -1,13 +1,13 @@
 #' Multivariate Probabilities of Scale Mixtures of Multivariate Normal Distributions
 #'
-#' The QRVSN algorithm is used in a broader context.
+#' The QRVSN algorithm is used in a broader context: using the Genz and Bretz
+#' (2002) algorithm to calculate multivariate distribution probabilities.
 #'
 #'
-#' @section The mvgb functions include:
+#' @section Multivariate Subgaussian Stable Distribution:
 #'
-#' \code{\link{pmvt}} -- multivariate student t distribution probabilities
+#' \code{\link{pmvss}} -- multivariate subgaussian stable distribution probabilities
 #'
-#' \code{\link{rmvt}} -- multivariate student t distribution random variates
 #'
 #' @docType package
 #' @name mvgb

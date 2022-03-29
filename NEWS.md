@@ -1,6 +1,6 @@
 # mvgb 0.0.2
 
-* Added `pmvt`
+* Include `pmvss`: multivariate subgaussian stable probabilities
 
 # mvgb 0.0.1
 

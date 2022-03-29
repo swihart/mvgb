@@ -90,20 +90,19 @@
 #'                0.85, 0.85   , 0.85   , 0.85   , 1   ),
 #'              .Dim = c(5L,5L))
 #'
+#'## default maxpts=25000 doesn't finish with error < abseps
 #'mvgb::pmvss(lower=rep(-1,5),
 #'            upper=rep(1,5),
 #'            alpha=1,
-#'            Q=Q)[c("value","inform","error","NU")]
+#'            Q=Q,
+#'            maxpts=25000)[c("value","inform","error")]
 #'
-#'mvgb::pmvt(x=NULL,
-#'           n=5,
-#'           df=1,
-#'           lower=rep(-1,5),
-#'           upper=rep(1,5),
-#'           infin=rep(2,5),
-#'           corr=Q,
-#'           corrF=NULL,
-#'           delta=rep(0,5))[c("value","inform","error","NU")]
+#'## increase maxpts to get inform value 0 (that is, error < abseps)
+#'mvgb::pmvss(lower=rep(-1,5),
+#'            upper=rep(1,5),
+#'            alpha=1,
+#'            Q=Q,
+#'            maxpts=25000*30)[c("value","inform","error")]
 #'
 #'
 #'set.seed(10)
@@ -115,7 +114,8 @@
 #'            upper=rep(2,5),
 #'            alpha=1.7,
 #'            Q=shape_matrix,
-#'            delta=rep(0,5))[c("value","inform","error","NU")]
+#'            delta=rep(0,5),
+#'            maxpts=25000*30)[c("value","inform","error")]
 #' @importFrom stats cov2cor
 #' @export
 pmvss <- function(lower, upper, alpha, Q, delta=rep(0,NROW(Q)), maxpts=25000, abseps = 0.001, releps = 0) {
