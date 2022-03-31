@@ -17,8 +17,8 @@ double F77_SUB(f77oneoversqrta_where_a_is_posstab)(int *n, double *p) {
 
   double input2 = ((double) (n[0]-900000000)/1000000.0)/2.0;  //0 // // // // //
 
-  double k1 = p[0]*PI;
-  double k2 = rexp(p[0]/p[0]);
+  double k1 = p[0]*PI;//runif(0.0, PI);//p[0]*PI;
+  double k2 = rexp(1);//qexp(p[0], 1.0, 0, 0);//rexp(p[0]/p[0]);
 
   /* generate u_i using k1, k2*/
   double A = sin(input2 * k1) /pow( sin(k1),(1/input2)    ) * pow(sin((1-input2)*k1)/k2, (1/input2-1));

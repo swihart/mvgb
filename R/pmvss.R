@@ -102,7 +102,7 @@
 #'            upper=rep(1,5),
 #'            alpha=1,
 #'            Q=Q,
-#'            maxpts=25000*30)[c("value","inform","error")]
+#'            maxpts=25000*350)[c("value","inform","error")]
 #'
 #'
 #'set.seed(10)
