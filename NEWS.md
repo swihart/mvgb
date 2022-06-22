@@ -1,3 +1,7 @@
+# mvgb 0.0.3
+
+* Update DESC with github info
+
 # mvgb 0.0.2
 
 * Include `pmvss`: multivariate subgaussian stable probabilities

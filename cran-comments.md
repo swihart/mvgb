@@ -1,5 +1,34 @@
 # mvgb R package
 Bruce Swihart  
+Jun 2022
+
+## Submission 1
+
+  * update DESC with github repo info
+
+## Test environments
+Local OS X: R version 4.1.2 (2021-11-01)
+  * Platform: x86_64-apple-darwin17.0 (64-bit)
+  * Running under: macOS Mojave 10.14.6
+  
+rhub::check(platform = "debian-gcc-devel"): Debian Linux, R-devel, GCC
+rhub::check(platform = "windows-x86_64-devel"): Windows Server 2022, R-devel, 64 bit
+
+devtools::check_win_devel(): https://win-builder.r-project.org/DlFclmc71V0H/
+
+M1: https://mac.r-project.org/macbuilder/results/1655822986-8d866d808891a8bb/
+
+## R CMD check results
+There were no ERRORs or WARNINGs or NOTEs.
+
+
+## Downstream dependencies
+There are currently no downstream dependencies for this package.
+
+---
+
+# mvgb R package
+Bruce Swihart  
 Mar 2022
 
 ## Submission 1
