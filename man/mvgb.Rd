@@ -2,7 +2,7 @@
 % Please edit documentation in R/mvgb.R
 \docType{package}
 \name{mvgb}
-\alias{mvgb}
+\alias{mvgb-package}
 \title{Multivariate Probabilities of Scale Mixtures of Multivariate Normal Distributions}
 \description{
 The QRVSN algorithm is used in a broader context: using the Genz and Bretz
@@ -14,3 +14,20 @@ The QRVSN algorithm is used in a broader context: using the Genz and Bretz
 \code{\link{pmvss}} -- multivariate subgaussian stable distribution probabilities
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/swihart/mvgb}
+  \item Report bugs at \url{https://github.com/swihart/mvgb/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Bruce Swihart \email{bruce.swihart@gmail.com} (\href{https://orcid.org/0000-0002-4216-9942}{ORCID})
+
+Authors:
+\itemize{
+  \item Alan Genz (wrote mvtdstpack.f)
+}
+
+}

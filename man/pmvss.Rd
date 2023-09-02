@@ -37,7 +37,9 @@ increase MAXPTS if ERROR is too large. (description from mvtnorm::GenzBretz) max
 \item{releps}{relative error tolerance as double.}
 }
 \value{
-Returns the variables from the MVTDST function (QRVSN algorithm):\preformatted{N      INTEGER, the number of variables.
+Returns the variables from the MVTDST function (QRVSN algorithm):
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{N      INTEGER, the number of variables.
 
 NU     INTEGER, the number of degrees of freedom.
        If NU < 1, then an MVN probability is computed.
@@ -83,7 +85,7 @@ inform INTEGER, termination status parameter:
        if INFORM = 3, correlation matrix not positive semi-definite.
 
 RND    ignore; this initializes RNG
-}
+}\if{html}{\out{</div>}}
 }
 \description{
 Computes the the distribution function of the multivariate subgaussian stable

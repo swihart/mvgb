@@ -12,5 +12,5 @@
 #' @docType package
 #' @name mvgb
 #' @useDynLib mvgb, .registration=TRUE
-NULL
-#> NULL
+"_PACKAGE"
+
