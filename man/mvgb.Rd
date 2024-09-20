@@ -2,6 +2,7 @@
 % Please edit documentation in R/mvgb.R
 \docType{package}
 \name{mvgb}
+\alias{mvgb}
 \alias{mvgb-package}
 \title{Multivariate Probabilities of Scale Mixtures of Multivariate Normal Distributions}
 \description{

@@ -1,5 +1,9 @@
 # mvgb 0.0.4
 
+* `PI` -> `M_PI` in src code
+
+# mvgb 0.0.4
+
 * Fix roxygen token
 
 # mvgb 0.0.3

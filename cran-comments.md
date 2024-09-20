@@ -1,11 +1,10 @@
 # mvgb R package
 Bruce Swihart  
-Sept 2023
+Sept 2024
 
 ## Submission 1
 
-   * fixed roxygen "_PACKAGE" issue as suggested by 
-     K. Hornik in Aug 19 2023 email 
+   * Fixed PI -> M_PI as per the strict test and BDR email
    
 ## Test environments
 * local OS X install: R version 4.2.2 (2022-10-31)
