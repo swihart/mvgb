@@ -1,6 +1,6 @@
 Package: mvgb
 Title: Multivariate Probabilities of Scale Mixtures of Multivariate Normal Distributions via the Genz and Bretz (2002) QRSVN Method
-Version: 0.0.5
+Version: 0.0.6
 Authors@R: 
     c(person("Alan", "Genz", role="aut", comment=c("wrote mvtdstpack.f")),
       person("Bruce", "Swihart", 
