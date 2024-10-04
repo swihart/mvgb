@@ -1,3 +1,24 @@
+
+# mvgb R package
+Bruce Swihart  
+Oct 2024
+
+## Submission
+
+* Moved DATA statements in src code above executable to get CRAN gcc compliance
+
+## Test environments
+* local OS X install: R version 4.2.2 (2022-10-31)
+    * Platform: x86_64-apple-darwin17.0 (64-bit)
+    * Running under: macOS Big Sur 11.2.3
+* rhub::rhub_check(platforms="gcc14")
+
+                     
+## R CMD check results
+There were no ERRORs or WARNINGs or NOTEs.
+
+
+
 # mvgb R package
 Bruce Swihart  
 Sept 2024

@@ -1,3 +1,7 @@
+# mvgb 0.0.6
+
+* Moved DATA statements in src code above executable to get CRAN gcc compliance
+
 # mvgb 0.0.5
 
 * `PI` -> `M_PI` in src code
